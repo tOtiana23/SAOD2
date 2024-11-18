@@ -1,0 +1,20 @@
+﻿  AVL.cpp
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\AVL\AVL\AVL\AVL_module.h(74,31): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\AVL\AVL\AVL\AVL_module.h(66,7): message : во время компиляции функции-члена класс шаблон "void AVLTree<int>::newBalance(AVLTreeNode<Type> *)"
+          with
+          [
+              Type=int
+          ]
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\AVL\AVL\AVL\AVL_module.h(132,13): message : см. первую ссылку на "AVLTree<int>::newBalance" в "AVLTree<int>::balanceTree"
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\AVL\AVL\AVL\AVL_module.h(222,3): message : см. первую ссылку на "AVLTree<int>::balanceTree" в "AVLTree<int>::removeRecoursive"
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\AVL\AVL\AVL\AVL_module.h(253,8): message : см. первую ссылку на "AVLTree<int>::removeRecoursive" в "AVLTree<int>::remove"
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\AVL\AVL\AVL\AVL_module.h(462,13): message : см. первую ссылку на "AVLTree<int>::remove" в "test1"
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\AVL\AVL\AVL\AVL_module.h(443,15): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "AVLTree<int>"
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\AVL\AVL\AVL\BinSearchTreeHeader.h(503,16): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\AVL\AVL\AVL\BinSearchTreeHeader.h(872,2): message : выполняется компиляция ссылки на экземпляр шаблон функции "size_t countRecursive<Type>(const TreeNode<Type> *)"
+          with
+          [
+              Type=int
+          ]
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\AVL\AVL\AVL\BinSearchTreeHeader.h(504,17): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  AVL.vcxproj -> C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\AVL\AVL\x64\Debug\AVL.exe

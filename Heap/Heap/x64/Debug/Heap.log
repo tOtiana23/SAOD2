@@ -1,0 +1,10 @@
+﻿  Heap.cpp
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\ОС\Heap\Heap\Heap_mod.h(96,15): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\ОС\Heap\Heap\Heap_mod.h(78,7): message : во время компиляции функции-члена класс шаблон "void MinHeap<int>::remove(size_t)"
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\ОС\Heap\Heap\Heap_mod.h(227,16): message : см. первую ссылку на "MinHeap<int>::remove" в "testMinHeap"
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\ОС\Heap\Heap\Heap_mod.h(219,15): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "MinHeap<int>"
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\ОС\Heap\Heap\Heap_mod.h(167,13): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\ОС\Heap\Heap\Heap_mod.h(152,7): message : во время компиляции функции-члена класс шаблон "void MinHeap<int>::filterDown(int)"
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\ОС\Heap\Heap\Heap_mod.h(96,14): message : см. первую ссылку на "MinHeap<int>::filterDown" в "MinHeap<int>::remove"
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\ОС\Heap\Heap\Heap_mod.h(227,16): message : см. первую ссылку на "MinHeap<int>::remove" в "testMinHeap"
+  Heap.vcxproj -> C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\ОС\Heap\x64\Debug\Heap.exe

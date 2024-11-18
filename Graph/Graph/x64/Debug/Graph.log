@@ -1,0 +1,10 @@
+﻿  Graph.cpp
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\Graph\Graph\Graph\Graph_mod.h(54,18): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\Graph\Graph\Graph\Graph_mod.h(48,10): message : во время компиляции функции-члена класс шаблон "void Graph<std::string>::insertVertex(const Type &)"
+          with
+          [
+              Type=std::string
+          ]
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\Graph\Graph\Graph\Graph.cpp(12,19): message : см. первую ссылку на "Graph<std::string>::insertVertex" в "main"
+C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\Graph\Graph\Graph\Graph.cpp(10,19): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "Graph<std::string>"
+  Graph.vcxproj -> C:\Users\Админ\OneDrive\Рабочий стол\учеба 3 курс\САОД\Graph\Graph\x64\Debug\Graph.exe
