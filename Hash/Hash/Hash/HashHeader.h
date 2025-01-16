@@ -10,32 +10,6 @@
 using namespace std;
 
 /// <summary>
-/// Сложность O(k), где k - размер key
-/// </summary>
-/// <typeparam name="Key"></typeparam>
-/// <param name="key"></param>
-/// <returns></returns>
-template <typename Key>
-size_t complexHash(const Key& key) {
-	const size_t prime1 = 73856093;
-	const size_t prime2 = 19349663;
-	const size_t prime3 = 83492791;
-	size_t hash = 0;
-
-	for (size_t i = 0; i < key.size(); ++i) {
-		hash ^= (hash << 5) + (hash >> 2) + key[i] * prime1; 
-		//hash << 5 сдвиг значения hash влево на 5 бит. Это эквивалентно умножению на 32.
-		//hash >> 2 — сдвиг значения hash вправо на 2 бита.Это эквивалентно делению на 4.
-		//key[i] * prime1 — умножение текущего символа ключа на первое простое число.
-		//Все эти значения комбинируются с помощью операции XOR
-		hash += prime2; //добавляем простое число
-		hash ^= (hash << 13) + (hash >> 7) + key[i] * prime3;
-	}
-
-	return hash;
-}
-
-/// <summary>
 /// Функция хэширования FNV-1a
 /// </summary>
 /// <typeparam name="Key"></typeparam>
@@ -44,7 +18,7 @@ size_t complexHash(const Key& key) {
 template <typename Key>
 size_t fnv1aHash(const Key& key) {
 	size_t hash = 2166136261; //стандартное значение для 32-разрядной версии
-	auto key_hash = hash<Key>{}(key);
+	auto key_hash = std::hash<Key>{}(key); //создаётся экземпляр стандартной хэш-функции и вычилсяется хэш для ключа
 	hash = (hash ^ key_hash) * 16777219; //умножаем для перемешивания битов
 	return hash;
 }
@@ -62,6 +36,7 @@ private:
 	size_t size; //размер таблицы
 	double load; //степень загруженности таблицы
 	double max_load; //максимальная степень загруженности таблицы
+	double min_load; //минимальная степень загруженности таблицы
 public:
 
 	/// <summary>
@@ -69,12 +44,13 @@ public:
 	/// </summary>
 	/// <param name="value"></param>
 	/// <returns></returns>
-	static size_t hashFunction(const Key& value) {
-		return fnv1aHash(value);
-	}
+	//static size_t hashFunction(const Key& value) {
+	//	return fnv1aHash(value);
+	//}
 
-	HashTable(size_t table_size, function<size_t(const Key&)> hash_function = hashFunction, double max_load = 0.7) :
-		table(table_size), size(0), hash_function(hashFunction), load(0.0), max_load(max_load) {}
+	//в hash_function_argument мы присваиваем хэш-функцию по умолчанию, а hash_function(hash_function_argument) инициализируем поле класса заданным значением
+	HashTable(size_t table_size, function<size_t(const Key&)> hash_function_argument = fnv1aHash<Key>, double max_load = 0.7, double min_load = 0.2) :
+		table(table_size), size(0), hash_function(hash_function_argument), load(0.0), max_load(max_load), min_load(min_load){}
 
 	/// <summary>
 	/// Вставка ключа в таблицу
@@ -92,6 +68,7 @@ public:
 		if (load > max_load) { //если коэффициент загрузки превышает максимальный, то делаем рехэширование
 			rehash();
 		}
+
 	}
 
 	/// <summary>
@@ -99,22 +76,30 @@ public:
 	/// </summary>
 	/// <param name="key"></param>
 	/// <returns></returns>
+	/// 
+	/// Можно задать конкертно хэш-функцию, тогда получится
+	/// size_t hash(const Key& key) const {
+	//	return fnv1aHash(key);
+	//}
 	size_t hash(const Key& key) const {
 		return hash_function(key);
 	}
 
 	/// <summary>
-	/// Удаление ключа из таблицы
+	/// Удаление ключа из таблицы. Исключение если ключ не найден
 	/// Сложность О(1) - лучшая; O(n) - средняя и худшая.
 	/// </summary>
 	/// <param name="value">Значение ключа, который необходимо удалить</param>
 	void remove(const Key& value) {
 		size_t index = hash_function(value) % table.size();
-		auto it = find(table[index].begin(), table[index].end(), value); //ищем
+		auto it = find(table[index].begin(), table[index].end(), value); //ищем. it тип итератора
 		if (it != table[index].end()) { //проверяем, что нашли
 			table[index].erase(it); //удаляем и разбираемся с последствиями удаления
 			size--;
 			load = (double)size / table.size();
+			if (load < min_load) { //если коэффициент загрузки меньше минимального, то делаем рехэширование
+				rehash_decrease();
+			}
 		}
 		else {
 			throw runtime_error("Key not found");
@@ -122,7 +107,7 @@ public:
 	}
 
 	/// <summary>
-	/// Рехэширование. 
+	/// Рехэширование
 	/// </summary>
 	void rehash() {
 		vector<list<Key>> newTable(table.size() * 2);
@@ -132,10 +117,25 @@ public:
 				newTable[index].push_back(key);
 			}
 		}
-		table = newTable; //обновляем ссылку на таблицу
+		table.swap(newTable); //обновляем ссылку на таблицу
 		load = (double)size / table.size();
 	}
 
+	void rehash_decrease() {
+		if (table.size() > 10) { // Уменьшаем только если размер больше 1
+			vector<list<Key>> newTable(table.size() / 2);
+			for (const auto& list : table) {
+				for (const auto& key : list) {
+					size_t index = hash_function(key) % newTable.size();
+					newTable[index].push_back(key);
+				}
+			}
+			table.swap(newTable); //обновляем ссылку на таблицу
+			load = (double)size / table.size();
+		}
+	}
+
+	
 	/// <summary>
 	/// Проверка наличия ключа в таблице
 	/// Сложность О(1) - лучшая; O(n) - средняя и худшая.
@@ -171,8 +171,22 @@ public:
 		size = 0;
 		load = 0.0;
 	}
+
+	void print() {
+		for (size_t i = 0; i < table.size(); ++i) {
+			cout << "Index " << i << ": ";
+			for (const auto& item : table[i]) {
+				cout << item << " ";
+			}
+			cout << "\n";
+		}
+	}
 };
 
+template <typename Key>
+size_t easy_hash(const Key& key) {
+	return key%5;
+}
 
 void testHashTable() {
 	//Тест с ключами-строками
@@ -203,4 +217,17 @@ void testHashTable() {
 	assert(intTable.sizes() == 0);
 	assert(!intTable.contains(10));
 	assert(!intTable.contains(30));
+
+	HashTable<int> collision(5, easy_hash<int>);
+	collision.insert(10); // hash(10) % 5 = 0
+	collision.insert(15); // hash(15) % 5 = 0 (коллизия)
+	collision.insert(20); // hash(20) % 5 = 0 (коллизия)
+
+	assert(collision.contains(10));
+	assert(collision.contains(15));
+	assert(collision.contains(20));
+
+	collision.print();
 }
+
+//для небольшой таблицы или легкой хэш-функции подобрать значения чтоб была коллизия
